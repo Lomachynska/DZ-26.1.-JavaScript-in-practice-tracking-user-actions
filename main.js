@@ -17,11 +17,30 @@ console.log('#9. JavaScript homework example file')
  */
 
 function handleButtonClick(buttonId, message) {
-  // code here
-}
+    // Знаходимо кнопку за допомогою переданого ID
+    const button = document.getElementById(buttonId);
+    
+    // Перевірка, чи знайдена кнопка
+    if (button) {
+      // Призначаємо обробник події кліку на кнопку
+      button.addEventListener('click', function() {
+        // Виводимо задане повідомлення у консоль при кожному кліку
+        console.log(message);
+      });
+    } else {
+      console.log(`Кнопка з ID "${buttonId}" не знайдена.`);
+    }
+  }
+  
+  // Демонстрація використання функції (припустимо, що HTML містить кнопку з ID 'myButton')
+  // handleButtonClick('myButton', 'Button clicked!');
+  
+// Знаходження кнопки: Функція використовує document.getElementById(buttonId) для того, щоб знайти кнопку за переданим ID.
+//Перевірка наявності кнопки: Якщо кнопка знайдена (не є null), призначається обробник події click, який виводить у консоль передане повідомлення.
+// Обробник події: За допомогою addEventListener додається обробник події для кліку на кнопку.
+// Експортування: експортувати функцію для використання в інших модулях: export { handleButtonClick };
+ 
 
-// Демонстрація використання функції (припустимо, що HTML містить кнопку з ID 'myButton')
-// handleButtonClick('myButton', 'Button clicked!');
 
 /*
  * #2
@@ -37,10 +56,32 @@ function handleButtonClick(buttonId, message) {
  */
 
 function trackMousePosition() {
-  // code here
+  // Додаємо обробник події для відстеження руху миші
+  document.addEventListener('mousemove', function(event) {
+    // Отримуємо координати курсору відносно вікна переглядача
+    const x = event.clientX;
+    const y = event.clientY;
+    
+    // Виводимо координати у консоль у потрібному форматі
+    console.log(`Mouse X: ${x}, Mouse Y: ${y}`);
+  });
 }
 
+// Викликаємо функцію для початку відстеження
+trackMousePosition();
+
+
 // console.log(trackMousePosition())
+
+
+// document.addEventListener('mousemove', callback) — цей код додає обробник події на весь документ, щоб відслідковувати рух миші. Кожного разу, коли миша рухається, викликається функція callback.
+// event.clientX та event.clientY — ці властивості події mousemove містять координати курсору миші відносно верхнього лівого кута вікна переглядача. Це значення буде змінюватися залежно від того, де знаходиться курсор на екрані.
+// console.log() — використовується для виведення координат у консоль. Формат виведення відповідає вимогам: "Mouse X: [X], Mouse Y: [Y]".
+// Коли  викликаємо функцію trackMousePosition(), вона реєструє обробник події на всьому документі.
+// Кожного разу, коли миша рухається, на консоль виводяться поточні координати курсору в форматі Mouse X: [X], Mouse Y: [Y].
+// Ця функція працюватиме протягом всієї сесії на веб-сторінці, поки вона не буде перервана або сторінка не буде перезавантажена.
+
+
 
 /*
  * #3
@@ -67,10 +108,45 @@ function trackMousePosition() {
 // createTestList()
 
 function setupEventDelegation(selector) {
-  // code here
+  // Знаходимо елемент списку за допомогою селектора
+  const list = document.querySelector(selector);
+  
+  // Перевіряємо, чи знайдено список
+  if (!list) {
+    console.error('Список не знайдено!');
+    return;
+  }
+
+  // Додаємо обробник події на весь список
+  list.addEventListener('click', function(event) {
+    // Перевіряємо, чи було клікнуто саме на елемент <li>
+    if (event.target && event.target.tagName === 'LI') {
+      // Отримуємо текст елемента <li> та обрізаємо зайві пробіли
+      const text = event.target.textContent.trim();
+      console.log(`Item clicked: ${text}`);
+    }
+  });
 }
+
+// Використання функції для тестування
+// Припустимо, що в HTML є список з id="testList"
+/* setupEventDelegation('#testList'); */
+
+// Експорт функції для використання та тестування
+export { setupEventDelegation };
+
 
 // setupEventDelegation('#testList')
 
-// Експорт функції для використання та тестування
-export { handleButtonClick, trackMousePosition, setupEventDelegation }
+
+
+
+// document.querySelector(selector) — використовується для вибору батьківського елемента списку (<ul> або <ol>) за допомогою переданого селектора.
+// list.addEventListener('click', callback) — додаємо обробник події для події click на весь список. Обробник буде спрацьовувати при кліку на будь-який елемент у списку, включаючи <li>.
+// event.target — вказує на елемент, на якому було здійснено клік. Ми перевіряємо, чи є цей елемент елементом <li>.
+// event.target.textContent.trim() — отримуємо текстовий вміст елемента, обрізаємо зайві пробіли за допомогою trim().
+// console.log() — виводимо текст елемента у форматі "Item clicked: [Текст Елемента]".
+
+// Коли ви викликаєте функцію setupEventDelegation('#testList'), вона встановлює обробник події на список з ідентифікатором testList.
+// Кожного разу, коли ви клікаєте на елемент <li>, функція перевіряє, чи був клік саме на <li>, і виводить його текст у консоль.
+// Ця техніка делегування подій дозволяє ефективно обробляти події на елементах, що можуть бути додані динамічно після завантаження сторінки.
